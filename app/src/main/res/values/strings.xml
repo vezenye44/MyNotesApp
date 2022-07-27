@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyNotesApp</string>
+    <string name="add_btn_description">ADD NOTE</string>
 </resources>
