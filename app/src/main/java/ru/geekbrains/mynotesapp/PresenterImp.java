@@ -71,18 +71,31 @@ public class PresenterImp implements Presenter {
     }
 
     @Override
-    public void onClickNotesItem(Note note) {
+    public void onClickAddButton() {
+        note = new Note("","", LocalDate.now());
+        Note.getNotes().add(note);
+
+        if (isLandscape) {
+            fragmentManager.beginTransaction().replace(fragContainerId01, NotesFragment.newInstance()).commit();
+        }
+        //
+
+        onClickNotesItem(note);
+    }
+
+    @Override
+    public void  onClickNotesItem(Note note) {
         isCalendarSelect = false;
         this.note = note;
         if (isLandscape) {
-            fragmentManager.beginTransaction().replace(fragContainerId02, NoteDetailFragment.newInstance()).commit();
+            fragmentManager.beginTransaction().replace(fragContainerId02, NoteDetailFragment.newInstance(onCreateDetailFragment())).commit();
         } else {
-            fragmentManager.beginTransaction().add(fragContainerId01, NoteDetailFragment.newInstance()).addToBackStack("").commit();
+            fragmentManager.beginTransaction().add(fragContainerId01, NoteDetailFragment.newInstance(onCreateDetailFragment())).addToBackStack("").commit();
         }
 
     }
 
-    @Override
+    @Override 
     public void onFirstCreateActivity(FragmentActivity activity) {
         isLandscape = activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         fragmentManager = activity.getSupportFragmentManager();
@@ -107,10 +120,10 @@ public class PresenterImp implements Presenter {
         fragmentManager = activity.getSupportFragmentManager();
 
         if (isLandscape) {
-            fragmentManager.beginTransaction().replace(fragContainerId02, NoteDetailFragment.newInstance()).commit();
+            fragmentManager.beginTransaction().replace(fragContainerId02, NoteDetailFragment.newInstance(onCreateDetailFragment())).commit();
         } else {
             if (note != null)
-                fragmentManager.beginTransaction().add(fragContainerId01, NoteDetailFragment.newInstance()).addToBackStack("").commit();
+                fragmentManager.beginTransaction().add(fragContainerId01, NoteDetailFragment.newInstance(onCreateDetailFragment())).addToBackStack("").commit();
         }
 
         if (isCalendarSelect) {
@@ -119,27 +132,16 @@ public class PresenterImp implements Presenter {
         }
     }
 
-    /*@Override
-    public void onStopActivity() {
-        if (fragmentManager == null) fragmentManager.popBackStack();
-        if (isLandscape) {
-            List<Fragment> fragments = fragmentManager.getFragments();
-            for (Fragment fragment: fragments) {
-                if (fragment instanceof NoteDetailFragment) fragmentManager.beginTransaction().remove(fragment);
-            }
-        }
-    }*/
-
     private void initFragments() {
         if (isLandscape) {
             fragmentManager.beginTransaction().replace(fragContainerId01, NotesFragment.newInstance()).commit();
 
-            fragmentManager.beginTransaction().replace(fragContainerId02, NoteDetailFragment.newInstance()).commit();
+            fragmentManager.beginTransaction().replace(fragContainerId02, NoteDetailFragment.newInstance(onCreateDetailFragment())).commit();
         } else {
             fragmentManager.beginTransaction().replace(fragContainerId01, NotesFragment.newInstance()).commit();
 
             if (note != null)
-                fragmentManager.beginTransaction().add(fragContainerId01, NoteDetailFragment.newInstance()).addToBackStack("").commit();
+                fragmentManager.beginTransaction().add(fragContainerId01, NoteDetailFragment.newInstance(onCreateDetailFragment())).addToBackStack("").commit();
         }
     }
 
@@ -157,9 +159,11 @@ public class PresenterImp implements Presenter {
     public void onBackPressed() {
         if (!isLandscape & !isCalendarSelect) {
             note = null;
+            initFragments();
+        } else if (isCalendarSelect) {
+            isCalendarSelect = false;
+            initFragments();
         }
-        isCalendarSelect = false;
-        initFragments();
     }
 
     @Override

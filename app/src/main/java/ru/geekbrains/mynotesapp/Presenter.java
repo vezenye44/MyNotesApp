@@ -28,4 +28,6 @@ public interface Presenter {
     void updatedTitle();
 
     void updatedText();
+
+    void onClickAddButton();
 }
