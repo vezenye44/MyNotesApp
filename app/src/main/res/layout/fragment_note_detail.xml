@@ -10,6 +10,7 @@
         tools:context=".ui.NoteDetailFragment">
     <EditText
             android:id="@+id/title_of_note_view"
+            android:hint="title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     <TextView
@@ -19,6 +20,7 @@
             android:layout_height="wrap_content"/>
     <EditText
             android:id="@+id/text_of_note_view"
+            android:hint="description"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
