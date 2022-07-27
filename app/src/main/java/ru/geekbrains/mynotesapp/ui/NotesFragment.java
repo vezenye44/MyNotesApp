@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import ru.geekbrains.mynotesapp.Presenter;
 import ru.geekbrains.mynotesapp.PresenterImp;
 import ru.geekbrains.mynotesapp.R;
@@ -52,6 +53,15 @@ public class NotesFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Note note = (Note) adapterView.getItemAtPosition(i);
                 PresenterImp.getInstance(requireActivity()).onClickNotesItem(note);
+            }
+        });
+
+        FloatingActionButton floatingActionButton = rootView.findViewById(R.id.add_note_btn);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.onClickAddButton();
             }
         });
 
