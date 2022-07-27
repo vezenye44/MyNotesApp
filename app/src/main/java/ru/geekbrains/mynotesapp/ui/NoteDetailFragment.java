@@ -14,6 +14,9 @@ import ru.geekbrains.mynotesapp.PresenterImp;
 import ru.geekbrains.mynotesapp.R;
 import ru.geekbrains.mynotesapp.model.Note;
 
+import java.time.LocalDate;
+import java.util.Optional;
+
 
 public class NoteDetailFragment extends Fragment {
 
@@ -22,6 +25,14 @@ public class NoteDetailFragment extends Fragment {
 
     public static NoteDetailFragment newInstance() {
         NoteDetailFragment fragment = new NoteDetailFragment();
+        return fragment;
+    }
+
+    public static NoteDetailFragment newInstance(Note note) {
+        NoteDetailFragment fragment = new NoteDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("SAVED_NOTE", note);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -44,7 +55,8 @@ public class NoteDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_note_detail, container, false);
 
-        Note note = presenter.onCreateDetailFragment();
+        //Note note = presenter.onCreateDetailFragment();
+        Note note = getArguments().getParcelable("SAVED_NOTE");
 
         EditText title = rootView.findViewById(R.id.title_of_note_view);
         TextView date = rootView.findViewById(R.id.date_of_note_view);
