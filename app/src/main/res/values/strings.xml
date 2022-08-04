@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MyNotesApp</string>
+    <string name="add_btn_description">ADD NOTE</string>
+    <string name="about_item">О программе</string>
+    <string name="delete_item">Удалить заметку</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="delete">Delete</string>
 </resources>

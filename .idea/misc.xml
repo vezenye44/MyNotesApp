@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2703125" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/drawable/activated_background.xml" value="0.128125" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.2703125" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.12916666666666668" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.12916666666666668" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout-land/activity_main.xml" value="0.23229166666666667" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/activity_navigation.xml" value="0.1" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/drawer_list_item.xml" value="0.25416666666666665" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/fragment_about.xml" value="0.20199275362318841" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/fragment_note_detail.xml" value="0.2546875" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/fragment_notes.xml" value="0.25" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/fragment_select_date.xml" value="0.264" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/menu/folder_menu.xml" value="0.2677083333333333" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/menu/fragment_detail_menu.xml" value="0.26875" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/menu/fragment_detrail_menu.xml" value="0.12760416666666666" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/menu/notes_popup.xml" value="0.26875" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/menu/notes_popup_menu.xml" value="0.1" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.12708333333333333" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2703125" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="jbr-11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
