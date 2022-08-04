@@ -1,21 +1,18 @@
 package ru.geekbrains.mynotesapp.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import ru.geekbrains.mynotesapp.Presenter;
 import ru.geekbrains.mynotesapp.PresenterImp;
 import ru.geekbrains.mynotesapp.R;
 import ru.geekbrains.mynotesapp.model.Note;
-
-import java.time.LocalDate;
-import java.util.Optional;
 
 
 public class NoteDetailFragment extends Fragment {
@@ -54,6 +51,8 @@ public class NoteDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_note_detail, container, false);
+
+        setHasOptionsMenu(true);
 
         //Note note = presenter.onCreateDetailFragment();
         Note note = getArguments().getParcelable("SAVED_NOTE");
@@ -111,5 +110,24 @@ public class NoteDetailFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.fragment_detail_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete:
+                presenter.onClickDeleteNote();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
