@@ -30,4 +30,8 @@ public interface Presenter {
     void updatedText();
 
     void onClickAddButton();
+
+    void onClickDeleteNote();
+
+    void onClickDeleteNote(int position);
 }

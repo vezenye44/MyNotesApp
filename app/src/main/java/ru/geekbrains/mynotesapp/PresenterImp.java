@@ -84,6 +84,31 @@ public class PresenterImp implements Presenter {
     }
 
     @Override
+    public void onClickDeleteNote() {
+        Note.getNotes().remove(note);
+        note = null;
+
+        isCalendarSelect = false;
+
+        initFragments();
+    }
+
+    @Override
+    public void onClickDeleteNote(int position) {
+        int notePosition = Note.getNotes().indexOf(note);
+        if (notePosition == position) {
+            onClickDeleteNote();
+        } else {
+            Note.getNotes().remove(position);
+
+            initFragments();
+
+            if (isCalendarSelect)
+                onDateClick();
+        }
+    }
+
+    @Override
     public void  onClickNotesItem(Note note) {
         isCalendarSelect = false;
         this.note = note;
