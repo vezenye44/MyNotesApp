@@ -1,15 +1,21 @@
 package ru.geekbrains.mynotesapp;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 import androidx.annotation.IdRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import ru.geekbrains.mynotesapp.model.Note;
-import ru.geekbrains.mynotesapp.ui.FragmentContainer;
-import ru.geekbrains.mynotesapp.ui.NoteDetailFragment;
-import ru.geekbrains.mynotesapp.ui.NotesFragment;
-import ru.geekbrains.mynotesapp.ui.SelectDateFragment;
+import ru.geekbrains.mynotesapp.ui.*;
 
+import java.nio.channels.AcceptPendingException;
 import java.time.LocalDate;
 
 public class PresenterImp implements Presenter {
@@ -19,6 +25,10 @@ public class PresenterImp implements Presenter {
     private boolean isLandscape;
     private boolean isCalendarSelect = false;
     private Note note;
+    private boolean isDeleteNoteProcess;
+    private int deleteNotePosition;
+    private boolean isAddSmartNoteProcess;
+    private String savedTitle = "";
 
     public PresenterImp() {
         super();
@@ -72,32 +82,30 @@ public class PresenterImp implements Presenter {
 
     @Override
     public void onClickAddButton() {
-        note = new Note("","", LocalDate.now());
+        onClickAddButton("");
+    }
+
+    private void onClickAddButton(String title) {
+        note = new Note( title,"", LocalDate.now());
         Note.getNotes().add(note);
 
         if (isLandscape) {
             fragmentManager.beginTransaction().replace(fragContainerId01, NotesFragment.newInstance()).commit();
         }
-        //
 
         onClickNotesItem(note);
     }
 
     @Override
-    public void onClickDeleteNote() {
-        Note.getNotes().remove(note);
-        note = null;
-
-        isCalendarSelect = false;
-
-        initFragments();
-    }
-
-    @Override
-    public void onClickDeleteNote(int position) {
+    public void onDeleteNote(int position) {
         int notePosition = Note.getNotes().indexOf(note);
         if (notePosition == position) {
-            onClickDeleteNote();
+            Note.getNotes().remove(note);
+            note = null;
+
+            isCalendarSelect = false;
+
+            initFragments();
         } else {
             Note.getNotes().remove(position);
 
@@ -107,6 +115,52 @@ public class PresenterImp implements Presenter {
                 onDateClick();
         }
     }
+
+    @Override
+    public void onClickDeleteNote() {
+        onClickDeleteNote(Note.getNotes().indexOf(note));
+    }
+
+    @Override
+    public void onClickDeleteNote(int position) {
+        deleteNotePosition = position;
+        isDeleteNoteProcess = true;
+        new AlertDialog.Builder((FragmentActivity)appContext)
+                .setTitle("Удалить заметку?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        onDeleteNote(position);
+                        isDeleteNoteProcess = false;
+                        Toast.makeText(appContext, "Заметка удалена", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        isDeleteNoteProcess = false;
+                        Toast.makeText(appContext, "Удаление отменено", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
+    }
+
+    Context appContext;
+    @Override
+    public void setAppContext(Context context) {
+        appContext = context;
+    }
+
+    @Override
+    public void onClickAddSmartNoteBtn() {
+        new AddSmartNoteDialogFragment().show(fragmentManager , AddSmartNoteDialogFragment.TAG);
+    }
+
+    @Override
+    public void onClickAddSmartNote(String toString) {
+        onClickAddButton(toString);
+    }
+
 
     @Override
     public void  onClickNotesItem(Note note) {
@@ -154,6 +208,12 @@ public class PresenterImp implements Presenter {
         if (isCalendarSelect) {
             isCalendarSelect = false;
             onDateClick();
+        }
+        if (isDeleteNoteProcess) {
+            onClickDeleteNote(deleteNotePosition);
+        }
+        if (isAddSmartNoteProcess) {
+            onClickAddSmartNoteBtn();
         }
     }
 
