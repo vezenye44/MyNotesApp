@@ -1,18 +1,17 @@
 package ru.geekbrains.mynotesapp.ui;
 
 import android.annotation.SuppressLint;
-import android.content.res.Configuration;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import ru.geekbrains.mynotesapp.Presenter;
 import ru.geekbrains.mynotesapp.PresenterImp;
 import ru.geekbrains.mynotesapp.R;
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements FragmentContainer
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,
                 drawerLayout,
                 R.string.drawer_open,
-                R.string.drawer_close){
+                R.string.drawer_close) {
 
             public void onDrawerClosed(View view) {
                 getSupportActionBar().setTitle(getTitle());
@@ -74,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements FragmentContainer
         } else {
             presenter.onCreateActivity(this);
         }
+        // TODO: Переработать: без использования передачи ссылки на активити.
+        presenter.setAppContext(this);
     }
 
     @Override
