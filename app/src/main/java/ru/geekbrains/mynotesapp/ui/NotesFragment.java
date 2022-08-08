@@ -1,5 +1,6 @@
 package ru.geekbrains.mynotesapp.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
@@ -27,6 +28,8 @@ public class NotesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = PresenterImp.getInstance(requireActivity());
+
+        setHasOptionsMenu(true);
     }
 
     public static NotesFragment newInstance() {
@@ -88,5 +91,24 @@ public class NotesFragment extends Fragment {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.fragment_list_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.list_menu_addWithTitle:
+                presenter.onClickAddSmartNoteBtn();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
