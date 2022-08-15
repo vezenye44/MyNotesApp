@@ -1,12 +1,7 @@
 package ru.geekbrains.mynotesapp;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AlertDialog;
@@ -15,7 +10,6 @@ import androidx.fragment.app.FragmentManager;
 import ru.geekbrains.mynotesapp.model.Note;
 import ru.geekbrains.mynotesapp.ui.*;
 
-import java.nio.channels.AcceptPendingException;
 import java.time.LocalDate;
 
 public class PresenterImp implements Presenter {
@@ -27,12 +21,6 @@ public class PresenterImp implements Presenter {
     private Note note;
     private boolean isDeleteNoteProcess;
     private int deleteNotePosition;
-    private boolean isAddSmartNoteProcess;
-    private String savedTitle = "";
-
-    public PresenterImp() {
-        super();
-    }
 
     @Override
     public void updateDate(int dayOfMonth, int month, int year) {
@@ -51,12 +39,21 @@ public class PresenterImp implements Presenter {
 
     @Override
     public void updatedDate() {
+
+        RecycleNotesFragment recycleFragment = (RecycleNotesFragment) fragmentManager.getFragments().stream().
+                filter((fragment) -> (fragment.getClass() == RecycleNotesFragment.class))
+                .findFirst().get();
+
+        recycleFragment.updateItem(Note.getNotes().indexOf(note));
     }
 
     @Override
     public void updatedTitle() {
-        if (isLandscape & !isCalendarSelect)
-            fragmentManager.beginTransaction().replace(fragContainerId01, NotesFragment.newInstance()).commit();
+        RecycleNotesFragment recycleFragment = (RecycleNotesFragment) fragmentManager.getFragments().stream().
+                filter((fragment) -> (fragment.getClass() == RecycleNotesFragment.class))
+                .findFirst().get();
+
+        recycleFragment.updateItem(Note.getNotes().indexOf(note));
     }
 
     @Override
@@ -86,11 +83,11 @@ public class PresenterImp implements Presenter {
     }
 
     private void onClickAddButton(String title) {
-        note = new Note( title,"", LocalDate.now());
+        note = new Note(title, "", LocalDate.now());
         Note.getNotes().add(note);
 
         if (isLandscape) {
-            fragmentManager.beginTransaction().replace(fragContainerId01, NotesFragment.newInstance()).commit();
+            fragmentManager.beginTransaction().replace(fragContainerId01, RecycleNotesFragment.newInstance()).commit();
         }
 
         onClickNotesItem(note);
@@ -100,19 +97,33 @@ public class PresenterImp implements Presenter {
     public void onDeleteNote(int position) {
         int notePosition = Note.getNotes().indexOf(note);
         if (notePosition == position) {
-            Note.getNotes().remove(note);
             note = null;
 
-            isCalendarSelect = false;
+            RecycleNotesFragment recycleFragment = (RecycleNotesFragment) fragmentManager.getFragments().stream().
+                    filter((fragment) -> (fragment.getClass() == RecycleNotesFragment.class))
+                    .findFirst().get();
 
-            initFragments();
+            recycleFragment.deleteItem(position);
+
+            if (isCalendarSelect) {
+                fragmentManager.popBackStack();
+                isCalendarSelect = false;
+            }
+
+            if (isLandscape) {
+                fragmentManager.beginTransaction().add(fragContainerId01, NoteDetailFragment.newInstance(onCreateDetailFragment())).addToBackStack("").commit();
+
+            } else {
+                fragmentManager.popBackStack();
+            }
         } else {
-            Note.getNotes().remove(position);
 
-            initFragments();
+            RecycleNotesFragment recycleFragment = (RecycleNotesFragment) fragmentManager.getFragments().stream().
+                    filter((fragment) -> (fragment.getClass() == RecycleNotesFragment.class))
+                    .findFirst().get();
 
-            if (isCalendarSelect)
-                onDateClick();
+            recycleFragment.deleteItem(position);
+
         }
     }
 
@@ -125,27 +136,22 @@ public class PresenterImp implements Presenter {
     public void onClickDeleteNote(int position) {
         deleteNotePosition = position;
         isDeleteNoteProcess = true;
-        new AlertDialog.Builder((FragmentActivity)appContext)
+        new AlertDialog.Builder(appContext)
                 .setTitle("Удалить заметку?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        onDeleteNote(position);
-                        isDeleteNoteProcess = false;
-                        Toast.makeText(appContext, "Заметка удалена", Toast.LENGTH_SHORT).show();
-                    }
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    onDeleteNote(position);
+                    isDeleteNoteProcess = false;
+                    Toast.makeText(appContext, "Заметка удалена", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        isDeleteNoteProcess = false;
-                        Toast.makeText(appContext, "Удаление отменено", Toast.LENGTH_SHORT).show();
-                    }
+                .setNegativeButton("No", (dialogInterface, i) -> {
+                    isDeleteNoteProcess = false;
+                    Toast.makeText(appContext, "Удаление отменено", Toast.LENGTH_SHORT).show();
                 })
                 .show();
     }
 
     Context appContext;
+
     @Override
     public void setAppContext(Context context) {
         appContext = context;
@@ -153,7 +159,7 @@ public class PresenterImp implements Presenter {
 
     @Override
     public void onClickAddSmartNoteBtn() {
-        new AddSmartNoteDialogFragment().show(fragmentManager , AddSmartNoteDialogFragment.TAG);
+        new AddSmartNoteDialogFragment().show(fragmentManager, AddSmartNoteDialogFragment.TAG);
     }
 
     @Override
@@ -163,7 +169,7 @@ public class PresenterImp implements Presenter {
 
 
     @Override
-    public void  onClickNotesItem(Note note) {
+    public void onClickNotesItem(Note note) {
         isCalendarSelect = false;
         this.note = note;
         if (isLandscape) {
@@ -174,7 +180,7 @@ public class PresenterImp implements Presenter {
 
     }
 
-    @Override 
+    @Override
     public void onFirstCreateActivity(FragmentActivity activity) {
         isLandscape = activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         fragmentManager = activity.getSupportFragmentManager();
@@ -212,18 +218,15 @@ public class PresenterImp implements Presenter {
         if (isDeleteNoteProcess) {
             onClickDeleteNote(deleteNotePosition);
         }
-        if (isAddSmartNoteProcess) {
-            onClickAddSmartNoteBtn();
-        }
     }
 
     private void initFragments() {
         if (isLandscape) {
-            fragmentManager.beginTransaction().replace(fragContainerId01, NotesFragment.newInstance()).commit();
+            fragmentManager.beginTransaction().replace(fragContainerId01, RecycleNotesFragment.newInstance()).commit();
 
             fragmentManager.beginTransaction().replace(fragContainerId02, NoteDetailFragment.newInstance(onCreateDetailFragment())).commit();
         } else {
-            fragmentManager.beginTransaction().replace(fragContainerId01, NotesFragment.newInstance()).commit();
+            fragmentManager.beginTransaction().replace(fragContainerId01, RecycleNotesFragment.newInstance()).commit();
 
             if (note != null)
                 fragmentManager.beginTransaction().add(fragContainerId01, NoteDetailFragment.newInstance(onCreateDetailFragment())).addToBackStack("").commit();
@@ -256,9 +259,6 @@ public class PresenterImp implements Presenter {
         if (!isCalendarSelect) {
             isCalendarSelect = true;
             LocalDate dateTime = note.getCreateData();
-            int dayOfMonth = dateTime.getDayOfMonth();
-            int month = dateTime.getMonthValue();
-            int year = dateTime.getYear();
             if (isLandscape) {
                 //
                 fragmentManager.beginTransaction().add(fragContainerId02, SelectDateFragment.newInstance(dateTime)).addToBackStack("").commit();
