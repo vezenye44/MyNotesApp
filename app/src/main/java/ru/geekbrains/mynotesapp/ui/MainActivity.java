@@ -1,15 +1,11 @@
 package ru.geekbrains.mynotesapp.ui;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import ru.geekbrains.mynotesapp.Presenter;
@@ -34,14 +30,11 @@ public class MainActivity extends AppCompatActivity implements FragmentContainer
         list.add("All");
         list.add("Today");
         list.add("...");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.drawer_list_item, list);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: реализовать выбор элемента
-            }
+        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+            // TODO: реализовать выбор элемента
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
