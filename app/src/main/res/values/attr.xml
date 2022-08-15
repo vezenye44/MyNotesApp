@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="note_detail_background" format="color"/>
+    <attr name="list_background" format="color"/>
+    <attr name="title_in_list" format="reference"/>
+    <attr name="date_in_list" format="reference"/>
+    <attr name="line_in_list" format="reference"/>
+    <attr name="add_btn_background" format="color"/>
+</resources>
