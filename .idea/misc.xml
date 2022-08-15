@@ -11,11 +11,13 @@
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout-land/activity_main.xml" value="0.23229166666666667" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/activity_navigation.xml" value="0.1" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/card_view.xml" value="0.264" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/drawer_add_note_dialoge.xml" value="0.20199275362318841" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/drawer_list_item.xml" value="0.25416666666666665" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/fragment_about.xml" value="0.20199275362318841" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/fragment_note_detail.xml" value="0.2546875" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/fragment_notes.xml" value="0.25" />
+        <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/fragment_recycle_notes.xml" value="0.20199275362318841" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/layout/fragment_select_date.xml" value="0.264" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/menu/folder_menu.xml" value="0.2677083333333333" />
         <entry key="..\:/Java/MyNotesApp/app/src/main/res/menu/fragment_detail_menu.xml" value="0.26875" />
