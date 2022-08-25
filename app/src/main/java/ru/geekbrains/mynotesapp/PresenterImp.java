@@ -111,7 +111,7 @@ public class PresenterImp implements Presenter {
             }
 
             if (isLandscape) {
-                fragmentManager.beginTransaction().add(fragContainerId01, NoteDetailFragment.newInstance(onCreateDetailFragment())).addToBackStack("").commit();
+                fragmentManager.beginTransaction().add(fragContainerId02, NoteDetailFragment.newInstance(onCreateDetailFragment())).addToBackStack("").commit();
 
             } else {
                 fragmentManager.popBackStack();
