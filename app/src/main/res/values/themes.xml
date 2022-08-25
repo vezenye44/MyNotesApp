@@ -13,4 +13,42 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.CustomMyNotesApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="cardCornerRadius">4dp</item>
+
+        <item name="colorPrimary">#696C39</item>
+        <item name="colorPrimaryVariant">#546248</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">#696C39</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
+        <item name="note_detail_background">@color/lite_orange</item>
+        <item name="list_background">@color/background_weak_orange</item>
+        <item name="add_btn_background">@color/lite_orange</item>
+
+        <item name="title_in_list">@style/title_in_list</item>
+        <item name="line_in_list">@style/line_in_list</item>
+        <item name="date_in_list">@style/date_in_list</item>d
+    </style>
+
+    <style name="title_in_list" parent="ThemeOverlay.Material3.AutoCompleteTextView">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:background">#e7e3b6</item>
+    </style>
+
+    <style name="line_in_list" parent="Widget.Material3.MaterialTimePicker.ImageButton">
+        <item name="android:background">#8c912a</item>
+    </style>
+
+    <style name="date_in_list" parent="ThemeOverlay.Material3.AutoCompleteTextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:background">#e7e3b6</item>
+    </style>
 </resources>
