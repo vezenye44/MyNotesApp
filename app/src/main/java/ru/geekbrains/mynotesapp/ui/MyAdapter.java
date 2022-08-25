@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.geekbrains.mynotesapp.R;
 
@@ -15,10 +16,14 @@ import java.util.Locale;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private final DataSource dataSource;
+    private final Fragment fragment;
     private OnItemClickListener itemClickListener;
 
-    public MyAdapter(DataSource dataSource) {
+    private int itemPosition;
+
+    public MyAdapter(DataSource dataSource, Fragment fragment) {
         this.dataSource = dataSource;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -49,7 +54,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @SuppressLint("NotifyDataSetChanged")
     public void deleteItemByPosition(int position) {
         dataSource.deleteData(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
+        //notifyDataSetChanged();
     }
 
     public void updateItemByPosition(int position) {
@@ -58,6 +64,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public void SetOnItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
+    }
+
+    public int getItemPosition() {
+        return itemPosition;
     }
 
     public interface OnItemClickListener {
@@ -81,6 +91,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 }
 
             });
+
+            if (fragment != null) {
+                fragment.registerForContextMenu(cardView);
+                cardView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        itemPosition = getAdapterPosition();
+                        cardView.showContextMenu();
+                        //Toast.makeText(fragment.requireContext(), "context menu", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+            }
         }
 
         public TextView getTitleView() {
