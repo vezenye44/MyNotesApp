@@ -4,4 +4,8 @@
           android:title="@string/delete"
           app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/context_menu_modify"
+          android:title="Modify"
+          app:showAsAction="ifRoom"/>
+
 </menu>
