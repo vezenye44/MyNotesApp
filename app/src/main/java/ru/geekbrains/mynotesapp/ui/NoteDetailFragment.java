@@ -63,7 +63,7 @@ public class NoteDetailFragment extends Fragment {
 
         if (note != null) {
             title.setText(note.getTitleOfNote());
-            date.setText(note.getCreateData().toString());
+            date.setText(note.getDate().toString());
             text.setText(note.getTextOfNote());
         }
 

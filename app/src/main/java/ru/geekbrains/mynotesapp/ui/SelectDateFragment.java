@@ -11,6 +11,7 @@ import ru.geekbrains.mynotesapp.PresenterImp;
 import ru.geekbrains.mynotesapp.R;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 
 public class SelectDateFragment extends Fragment {
@@ -25,12 +26,12 @@ public class SelectDateFragment extends Fragment {
     private int month;
     private int year;
 
-    public static SelectDateFragment newInstance(LocalDate dateTime) {
+    public static SelectDateFragment newInstance(Date date) {
         SelectDateFragment fragment = new SelectDateFragment();
         Bundle args = new Bundle();
-        args.putInt(DAY_OF_MONTH, dateTime.getDayOfMonth());
-        args.putInt(MONTH, dateTime.getMonthValue());
-        args.putInt(YEAR, dateTime.getYear());
+        args.putInt(DAY_OF_MONTH, date.getDay());
+        args.putInt(MONTH, date.getMonth());
+        args.putInt(YEAR, date.getYear());
         fragment.setArguments(args);
         return fragment;
     }
