@@ -10,19 +10,19 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.geekbrains.mynotesapp.R;
+import ru.geekbrains.mynotesapp.model.DataSource;
 
 import java.util.Locale;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
-    private final DataSource dataSource;
+    private DataSource dataSource;
     private final Fragment fragment;
     private OnItemClickListener itemClickListener;
 
     private int itemPosition;
 
-    public MyAdapter(DataSource dataSource, Fragment fragment) {
-        this.dataSource = dataSource;
+    public MyAdapter(Fragment fragment) {
         this.fragment = fragment;
     }
 
@@ -43,7 +43,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         holder.getTitleView().setText(titleOfNote);
 
-        holder.getDateView().setText((dataSource.getData(position).getCreateData().toString()));
+        holder.getDateView().setText((dataSource.getData(position).getDate().toString()));
     }
 
     @Override
@@ -53,13 +53,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @SuppressLint("NotifyDataSetChanged")
     public void deleteItemByPosition(int position) {
-        dataSource.deleteData(position);
+        //dataSource.deleteData(position);
         notifyItemRemoved(position);
         //notifyDataSetChanged();
     }
 
+    void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+        notifyDataSetChanged();
+    }
+
     public void updateItemByPosition(int position) {
-        notifyItemChanged(position);
+        //notifyItemChanged(position);
     }
 
     public void SetOnItemClickListener(OnItemClickListener itemClickListener) {
