@@ -6,30 +6,25 @@ import androidx.annotation.NonNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Note implements Parcelable {
+
+    private String id;
     private String titleOfNote;
     private String textOfNote;
-    private LocalDate createData;
+    private Date date;
 
-    private static final ArrayList<Note> notes = new ArrayList<>();
-
-    static {
-        notes.add(new Note("title 1", "description 1", LocalDate.now()));
-        notes.add(new Note("title 2", "description 2", LocalDate.now()));
-        notes.add(new Note("title 3", "description 3", LocalDate.now()));
-    }
-
-    public Note(String titleOfNote, String textOfNote, LocalDate createData) {
+    public Note(String titleOfNote, String textOfNote, Date date) {
         this.titleOfNote = titleOfNote;
         this.textOfNote = textOfNote;
-        this.createData = createData;
+        this.date = date;
     }
 
     protected Note(Parcel in) {
         titleOfNote = in.readString();
         textOfNote = in.readString();
-        createData = (LocalDate) in.readSerializable();
+        date = (Date) in.readSerializable();
     }
 
     public static final Creator<Note> CREATOR = new Creator<Note>() {
@@ -44,18 +39,15 @@ public class Note implements Parcelable {
         }
     };
 
-    @NonNull
-    @Override
-    public String toString() {
-        if (titleOfNote.equals("")) {
-            return "note " + (notes.indexOf(this) + 1);
-        }
-        return getTitleOfNote();
-    }
+//    @NonNull
+//    @Override
+//    public String toString() {
+//        if (titleOfNote.equals("")) {
+//            return "note " + (notes.indexOf(this) + 1);
+//        }
+//        return getTitleOfNote();
+//    }
 
-    public static ArrayList<Note> getNotes() {
-        return notes;
-    }
 
     public String getTitleOfNote() {
         return titleOfNote;
@@ -65,9 +57,6 @@ public class Note implements Parcelable {
         return textOfNote;
     }
 
-    public LocalDate getCreateData() {
-        return createData;
-    }
 
     public void setTitleOfNote(String titleOfNote) {
         this.titleOfNote = titleOfNote;
@@ -77,9 +66,6 @@ public class Note implements Parcelable {
         this.textOfNote = textOfNote;
     }
 
-    public void setCreateData(LocalDate createData) {
-        this.createData = createData;
-    }
 
     @Override
     public int describeContents() {
@@ -90,6 +76,18 @@ public class Note implements Parcelable {
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(titleOfNote);
         parcel.writeString(textOfNote);
-        parcel.writeSerializable(createData);
+        parcel.writeSerializable(date);
+    }
+
+    public String getId() {return id;}
+
+    public void setId(String id) {this.id = id;}
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
