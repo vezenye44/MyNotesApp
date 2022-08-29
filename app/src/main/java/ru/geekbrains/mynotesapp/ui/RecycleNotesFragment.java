@@ -3,7 +3,6 @@ package ru.geekbrains.mynotesapp.ui;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.*;
-import android.widget.AdapterView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,6 +12,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import ru.geekbrains.mynotesapp.Presenter;
 import ru.geekbrains.mynotesapp.PresenterImp;
 import ru.geekbrains.mynotesapp.R;
+import ru.geekbrains.mynotesapp.model.CardsSourceResponse;
+import ru.geekbrains.mynotesapp.model.DataSource;
+import ru.geekbrains.mynotesapp.model.DataSourceFirebaseImpl;
 import ru.geekbrains.mynotesapp.model.Note;
 
 
@@ -20,6 +22,8 @@ public class RecycleNotesFragment extends Fragment {
 
     Presenter presenter;
     MyAdapter adapter;
+
+    DataSource dataSource;
 
     public RecycleNotesFragment() {
         // Required empty public constructor
@@ -43,42 +47,29 @@ public class RecycleNotesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recycle_notes, container, false);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.recycle_view);
-
         initRecycleView(recyclerView);
+        registerForContextMenu(recyclerView);
+        dataSource = new DataSourceFirebaseImpl().init(new CardsSourceResponse() {
+            @Override
+            public void initialized(DataSource dataSource) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.setDataSource(dataSource);
+        presenter.setDataSource(dataSource);
 
         FloatingActionButton floatingActionButton = rootView.findViewById(R.id.add_note_btn);
-
         floatingActionButton.setOnClickListener(view -> presenter.onClickAddButton());
-
-        registerForContextMenu(recyclerView);
 
         return rootView;
     }
 
     private void initRecycleView(RecyclerView recyclerView) {
-        DataSource dataSource = new DataSource() {
-            @Override
-            public Note getData(int position) {
-                return Note.getNotes().get(position);
-            }
-
-            @Override
-            public int getDataSize() {
-                return Note.getNotes().size();
-            }
-
-            @Override
-            public void deleteData(int position) {
-                Note.getNotes().remove(position);
-            }
-
-
-        };
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
 
-        adapter = new MyAdapter(dataSource, this);
+        adapter = new MyAdapter( this);
         recyclerView.setAdapter(adapter);
 
         adapter.SetOnItemClickListener((view, position) -> {
@@ -104,7 +95,7 @@ public class RecycleNotesFragment extends Fragment {
             return true;
         }
         if (item.getItemId() == R.id.context_menu_modify) {
-            presenter.onClickNotesItem(Note.getNotes().get(adapter.getItemPosition()));
+            presenter.onClickNotesItem(dataSource.getData(adapter.getItemPosition()));
             return true;
         }
         return false;
@@ -130,17 +121,11 @@ public class RecycleNotesFragment extends Fragment {
     }
 
     public void deleteItem(int position) {
-        View rootView = requireView();
-        RecyclerView recyclerView = rootView.findViewById(R.id.recycle_view);
-
-        ((MyAdapter) recyclerView.getAdapter()).deleteItemByPosition(position);
+        adapter.deleteItemByPosition(position);
     }
 
     public void updateItem(int position) {
-        View rootView = requireView();
-        RecyclerView recyclerView = rootView.findViewById(R.id.recycle_view);
-
-        ((MyAdapter) recyclerView.getAdapter()).updateItemByPosition(position);
+        adapter.updateItemByPosition(position);
     }
 
 }
