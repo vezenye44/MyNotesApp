@@ -19,7 +19,7 @@ import ru.geekbrains.mynotesapp.model.Note;
 import java.util.ArrayList;
 
 public class NotesFragment extends Fragment {
-    Presenter presenter;
+    /*Presenter presenter;
 
     public NotesFragment() {
     }
@@ -110,5 +110,5 @@ public class NotesFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
