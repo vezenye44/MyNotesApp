@@ -3,6 +3,7 @@ package ru.geekbrains.mynotesapp;
 import android.content.Context;
 import android.view.ViewGroup;
 import androidx.fragment.app.FragmentActivity;
+import ru.geekbrains.mynotesapp.model.DataSource;
 import ru.geekbrains.mynotesapp.model.Note;
 
 public interface Presenter {
@@ -44,4 +45,6 @@ public interface Presenter {
     void onClickAddSmartNoteBtn();
 
     void onClickAddSmartNote(String toString);
+
+    void setDataSource(DataSource dataSource);
 }
