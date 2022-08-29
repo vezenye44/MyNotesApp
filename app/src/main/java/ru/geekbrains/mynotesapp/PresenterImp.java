@@ -7,14 +7,19 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import ru.geekbrains.mynotesapp.model.DataSource;
 import ru.geekbrains.mynotesapp.model.Note;
 import ru.geekbrains.mynotesapp.ui.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class PresenterImp implements Presenter {
 
     private FragmentManager fragmentManager;
+
+    private DataSource dataSource;
     private static PresenterImp INSTANCE;
     private boolean isLandscape;
     private boolean isCalendarSelect = false;
@@ -24,17 +29,20 @@ public class PresenterImp implements Presenter {
 
     @Override
     public void updateDate(int dayOfMonth, int month, int year) {
-        note.setCreateData(LocalDate.of(year, month, dayOfMonth));
+        note.setDate(new Date(year, month, dayOfMonth));
+        dataSource.updateData(dataSource.indexOf(note),note);
     }
 
     @Override
     public void updateTitle(String title) {
         note.setTitleOfNote(title);
+        dataSource.updateData(dataSource.indexOf(note),note);
     }
 
     @Override
     public void updateText(String text) {
         note.setTextOfNote(text);
+        dataSource.updateData(dataSource.indexOf(note),note);
     }
 
     @Override
@@ -44,7 +52,9 @@ public class PresenterImp implements Presenter {
                 filter((fragment) -> (fragment.getClass() == RecycleNotesFragment.class))
                 .findFirst().get();
 
-        recycleFragment.updateItem(Note.getNotes().indexOf(note));
+        dataSource.updateData(dataSource.indexOf(note),note);
+        recycleFragment.updateItem(dataSource.indexOf(note));
+        //Note.getNotes().indexOf(note)
     }
 
     @Override
@@ -53,7 +63,9 @@ public class PresenterImp implements Presenter {
                 filter((fragment) -> (fragment.getClass() == RecycleNotesFragment.class))
                 .findFirst().get();
 
-        recycleFragment.updateItem(Note.getNotes().indexOf(note));
+        dataSource.updateData(dataSource.indexOf(note),note);
+        recycleFragment.updateItem(dataSource.indexOf(note));
+        //Note.getNotes().indexOf(note)
     }
 
     @Override
@@ -83,8 +95,8 @@ public class PresenterImp implements Presenter {
     }
 
     private void onClickAddButton(String title) {
-        note = new Note(title, "", LocalDate.now());
-        Note.getNotes().add(note);
+        note = new Note(title, "", Date.from(Instant.now()));
+        dataSource.addData(note);
 
         if (isLandscape) {
             fragmentManager.beginTransaction().replace(fragContainerId01, RecycleNotesFragment.newInstance()).commit();
@@ -95,7 +107,8 @@ public class PresenterImp implements Presenter {
 
     @Override
     public void onDeleteNote(int position) {
-        int notePosition = Note.getNotes().indexOf(note);
+        int notePosition = dataSource.indexOf(note);
+        //Note.getNotes().indexOf(note)
         if (notePosition == position) {
             note = null;
 
@@ -104,6 +117,7 @@ public class PresenterImp implements Presenter {
                     .findFirst().get();
 
             recycleFragment.deleteItem(position);
+            dataSource.deleteData(position);
 
             if (isCalendarSelect) {
                 fragmentManager.popBackStack();
@@ -123,13 +137,14 @@ public class PresenterImp implements Presenter {
                     .findFirst().get();
 
             recycleFragment.deleteItem(position);
+            dataSource.deleteData(position);
 
         }
     }
 
     @Override
     public void onClickDeleteNote() {
-        onClickDeleteNote(Note.getNotes().indexOf(note));
+        onClickDeleteNote(dataSource.indexOf(note));
     }
 
     @Override
@@ -165,6 +180,11 @@ public class PresenterImp implements Presenter {
     @Override
     public void onClickAddSmartNote(String toString) {
         onClickAddButton(toString);
+    }
+
+    @Override
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
 
@@ -237,8 +257,8 @@ public class PresenterImp implements Presenter {
     public Note onCreateDetailFragment() {
         if (note != null) {
             return note;
-        } else if (!Note.getNotes().isEmpty()) {
-            return note = Note.getNotes().get(0);
+        } else if (!dataSource.isEmpty()) {
+            return note = dataSource.getData(0);
         }
         return null;
     }
@@ -258,14 +278,14 @@ public class PresenterImp implements Presenter {
     public void onDateClick() {
         if (!isCalendarSelect) {
             isCalendarSelect = true;
-            LocalDate dateTime = note.getCreateData();
+            Date date = note.getDate();
             if (isLandscape) {
                 //
-                fragmentManager.beginTransaction().add(fragContainerId02, SelectDateFragment.newInstance(dateTime)).addToBackStack("").commit();
+                fragmentManager.beginTransaction().add(fragContainerId02, SelectDateFragment.newInstance(date)).addToBackStack("").commit();
 
             } else {
                 //
-                fragmentManager.beginTransaction().add(fragContainerId01, SelectDateFragment.newInstance(dateTime)).addToBackStack("").commit();
+                fragmentManager.beginTransaction().add(fragContainerId01, SelectDateFragment.newInstance(date)).addToBackStack("").commit();
 
             }
         }
